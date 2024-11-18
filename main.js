@@ -17,7 +17,7 @@ function createTodoElement(todoText, isCompleted = false) {
   if (isCompleted) {
     todoCard.classList.add('todo-completed');
   }
-
+  
   const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
   checkbox.checked = isCompleted;
@@ -37,10 +37,19 @@ function createTodoElement(todoText, isCompleted = false) {
   todoTextElement.setAttribute('contenteditable', 'true');
   todoTextElement.textContent = todoText;
 
+    // Enterキーで改行できるようにする
+    todoTextElement.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); // 通常のEnter動作を無効化
+        document.execCommand('insertHTML', false, '<br><br>'); // 改行を挿入
+      }
+    });
+
   const deleteBtn = document.createElement('button');
   deleteBtn.classList.add('delete-btn');
   deleteBtn.textContent = '削除';
 
+  
   // 削除ボタンのイベント
   deleteBtn.addEventListener('click', () => {
     deleteTodo(todoId);
