@@ -31,27 +31,24 @@ function createTodoElement(todoText, isCompleted = false) {
     }
   });
 
-  const todoTextElement = document.createElement('span');
+  const todoTextElement = document.createElement('div'); // <div>に変更
   todoTextElement.classList.add('todo-text');
   todoTextElement.setAttribute('data-id', todoId);
   todoTextElement.setAttribute('contenteditable', 'true');
   todoTextElement.textContent = todoText;
 
-    // Enterキーで改行できるようにする
-    todoTextElement.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault(); // 通常のEnter動作を無効化
-  
-        // カーソル位置に <br> を挿入
-        insertLineBreak(todoTextElement);
-      }
-    });
+  // Enterキーで改行できるようにする
+  todoTextElement.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // 通常のEnter動作を無効化
+      insertLineBreak(todoTextElement); // 改行を挿入
+    }
+  });
 
   const deleteBtn = document.createElement('button');
   deleteBtn.classList.add('delete-btn');
   deleteBtn.textContent = '削除';
 
-  
   // 削除ボタンのイベント
   deleteBtn.addEventListener('click', () => {
     deleteTodo(todoId);
@@ -134,7 +131,35 @@ function deleteTodo(todoId) {
   }
 }
 
+// 初期化時にlocalStorageからTODOを読み込む（必要に応じて）
+document.addEventListener('DOMContentLoaded', () => {
+  const todos = getTodos();
+  todos.forEach(todo => {
+    const todoElement = createTodoElement(todo.text, todo.completed);
+    if (todo.completed) {
+      completedTodoList.appendChild(todoElement);
+    } else {
+      uncompletedTodoList.appendChild(todoElement);
+    }
+  });
+});
 
+// 追加されたTODOをlocalStorageに保存する
+function saveTodos() {
+  const todos = [];
+  const allTodos = document.querySelectorAll('.todo-card');
+  allTodos.forEach(todoCard => {
+    const todoId = todoCard.querySelector('.todo-text').getAttribute('data-id');
+    const todoText = todoCard.querySelector('.todo-text').textContent;
+    const isCompleted = todoCard.classList.contains('todo-completed');
+    todos.push({ id: todoId, text: todoText, completed: isCompleted });
+  });
+  localStorage.setItem('todos', JSON.stringify(todos));
+}
+
+// TODOの変更や削除時にlocalStorageを更新
+document.addEventListener('input', saveTodos);
+document.addEventListener('click', saveTodos);
 
 
 [...document.getElementsByClassName('delete-btn')]
