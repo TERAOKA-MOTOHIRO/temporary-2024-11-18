@@ -39,11 +39,14 @@ function createTodoElement(todoText, isCompleted = false) {
 
     // Enterキーで改行できるようにする
     todoTextElement.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault(); // 通常のEnter動作を無効化
-        document.execCommand('insertHTML', false, '<br><br>'); // 改行を挿入
-      }
-    });
+      todoTextElement.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault(); // 通常のEnter動作を無効化
+    
+          // カーソル位置に <br> を挿入
+          insertLineBreak(todoTextElement);
+        }
+      });
 
   const deleteBtn = document.createElement('button');
   deleteBtn.classList.add('delete-btn');
