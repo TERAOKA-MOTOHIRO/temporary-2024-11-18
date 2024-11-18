@@ -35,7 +35,7 @@ function createTodoElement(todoText, isCompleted = false) {
   todoTextElement.classList.add('todo-text');
   todoTextElement.setAttribute('data-id', todoId);
   todoTextElement.setAttribute('contenteditable', 'true');
-  todoTextElement.textContent = todoText;
+  todoTextElement.innerHTML = todoText; // innerHTMLを使用して改行を保持
 
   // Enterキーで改行できるようにする
   todoTextElement.addEventListener('keydown', (e) => {
@@ -150,7 +150,7 @@ function saveTodos() {
   const allTodos = document.querySelectorAll('.todo-card');
   allTodos.forEach(todoCard => {
     const todoId = todoCard.querySelector('.todo-text').getAttribute('data-id');
-    const todoText = todoCard.querySelector('.todo-text').textContent;
+    const todoText = todoCard.querySelector('.todo-text').innerHTML; // innerHTMLを使用して改行を保存
     const isCompleted = todoCard.classList.contains('todo-completed');
     todos.push({ id: todoId, text: todoText, completed: isCompleted });
   });
@@ -160,7 +160,6 @@ function saveTodos() {
 // TODOの変更や削除時にlocalStorageを更新
 document.addEventListener('input', saveTodos);
 document.addEventListener('click', saveTodos);
-
 
 [...document.getElementsByClassName('delete-btn')]
   .forEach(node => node.addEventListener('click', () => console.log(confirm('このTODOを削除してもよろしいですか？'))));
