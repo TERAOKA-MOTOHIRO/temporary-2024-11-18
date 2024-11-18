@@ -41,7 +41,7 @@ function createTodoElement(todoText, isCompleted = false) {
   todoTextElement.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault(); // 通常のEnter動作を無効化
-      insertLineBreak(todoTextElement); // 改行を挿入
+      nl2br(todoTextElement); // 改行を挿入
     }
   });
 
@@ -60,6 +60,10 @@ function createTodoElement(todoText, isCompleted = false) {
   todoCard.appendChild(deleteBtn);
 
   return todoCard;
+}
+
+function nl2br(str) {
+  return str.replace(/\n/g, '<br>');
 }
 
 // 改行を挿入する関数
