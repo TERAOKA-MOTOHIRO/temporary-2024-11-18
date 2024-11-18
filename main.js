@@ -65,6 +65,25 @@ function createTodoElement(todoText, isCompleted = false) {
   return todoCard;
 }
 
+// 改行を挿入する関数
+function insertLineBreak(element) {
+  const selection = window.getSelection(); // 現在の選択範囲を取得
+  const range = selection.getRangeAt(0); // 選択範囲を取得
+
+  // <br>タグを作成
+  const br = document.createElement('br');
+  range.deleteContents(); // 現在の選択内容を削除
+  range.insertNode(br); // <br>タグを挿入
+
+  // 挿入後、カーソルを改行の後に移動
+  range.setStartAfter(br);
+  range.setEndAfter(br);
+
+  // 再度選択範囲を設定
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
 // UUIDを生成する関数（簡易的な方法）
 function generateUUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
